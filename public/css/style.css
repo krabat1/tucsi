@@ -1,0 +1,14 @@
+/*! tailwindcss v4.1.18 | MIT License | https://tailwindcss.com */
+.flex {
+  display: flex;
+}
+.bg-\[\#ff5733\] {
+  background-color: #ff5733;
+}
+.pt-4 {
+  padding-top: calc(var(--spacing, 0.25rem) * 4);
+}
+body {
+  margin-inline: auto;
+  max-width: var(--breakpoint-lg, 64rem);
+}  
