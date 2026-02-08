@@ -1,0 +1,10 @@
+https://tucsiphysio.webnode.hu/
+
+logo font: https://fonts.google.com/specimen/Life+Savers
+menu font: Metropolis helyett
+https://fonts.google.com/specimen/Figtree
+page title: https://fonts.google.com/specimen/Josefin+Sans
+page subtitle: Metropolis helyett
+https://fonts.google.com/specimen/Figtree
+
+képnézegető: https://photoswipe.com/getting-started/
