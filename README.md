@@ -28,6 +28,8 @@ RewriteRule ^(.*)$ dist/$1.html [L]
 # 4. Opcionális: 404 hiba kezelése
 ErrorDocument 404 /dist/404.html
 ``` 
+Ha az Apache szerveren valamiért nem működnének a szép URL-ek, nézd meg, hogy az Apache-nál az `AllowOverride All` be van-e kapcsolva – ez kell ahhoz, hogy a `.htaccess` életbe lépjen.
+ 
 Ha a szolgáltató Nginx-et használ, ott a `.htaccess` nem fog működni. Ebben az esetben a tárhely admin felületén (vagy a konfigurációban) az alábbi `try_files` direktívát kell keresni/beállítani:
 
 ```Nginx
@@ -90,6 +92,10 @@ Párhuzamos futtatás kell hogy figyeljük a 3000-es portot és a css-mentést i
 
 Tehát:
 `"start": "concurrently \"npm run watch:node\" \"npm run watch:css\""`
+
+# DevTools Project Settings
+chrome://flags/#devtools-project-settings -> off
+
 ## Jelenlegi honlap
 https://tucsiphysio.webnode.hu/
 ## Google fonts
@@ -97,6 +103,9 @@ logo font: https://fonts.google.com/specimen/Life+Savers
 menu font: Metropolis helyett
 https://fonts.google.com/specimen/Figtree
 page title: https://fonts.google.com/specimen/Josefin+Sans
+https://fonts.google.com/specimen/Quicksand
+https://fonts.google.com/specimen/Allura
+
 page subtitle: Metropolis helyett
 https://fonts.google.com/specimen/Figtree
 

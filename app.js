@@ -2,6 +2,7 @@ import * as fs from "node:fs";
 import path from "node:path";
 import http from "node:http";
 import { fileURLToPath } from "url";
+import metaData from "./metadata.js";
 
 // PUBLIC MAPPA STATIKUS FÁJLKISZOLGÁLÁS
 const __filename = fileURLToPath(import.meta.url);
@@ -26,18 +27,31 @@ const DIST_DIR = "./dist"; // Ide kerül a kész, statikus weboldal
 
 // 1. FUNKCIÓ: A "Legózás" (Build folyamat)
 function buildPage(pageName) {
-  const header = fs.readFileSync(
-    path.join(PARTIALS_DIR, "header.html"),
-    "utf8",
-  );
+  let header = fs.readFileSync(path.join(PARTIALS_DIR, "header.html"), "utf8");
   const footer = fs.readFileSync(
     path.join(PARTIALS_DIR, "footer.html"),
     "utf8",
   );
-  const content = fs.readFileSync(
+  let content = fs.readFileSync(
     path.join(SRC_DIR, `${pageName}.html`),
     "utf8",
   );
+
+  // Alapértelmezett adatok, ha valami kimaradna az objektumból
+  const data = metaData[pageName] || {
+    title: "Tücsi Canine Physio",
+    description: "",
+    date: "",
+  };
+
+  // Helyőrzők cseréje
+  header = header
+    .replace("{{TITLE}}", data.title)
+    .replace("{{DESCRIPTION}}", data.description);
+
+  if (content.includes("{{DATE}}") && data.date) {
+    content = content.replace("{{DATE}}", formatToISO(data.date));
+}
 
   // Egyszerű csere: a tartalomba beillesztjük a részeket
   return `${header}\n${content}\n${footer}`;
@@ -92,15 +106,30 @@ else {
 
       try {
         const page = req.url === "/" ? "index" : req.url.replace("/", "");
+        //console.log('page '+page)
         const html = buildPage(page);
         res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
         res.end(html);
       } catch (e) {
         res.writeHead(404);
+        console.log({ e });
         res.end("Hiba: Az oldal nem található.");
       }
     })
     .listen(3000, () =>
       console.log("SSR Mód: Figyelek a http://localhost:3000 címen..."),
     );
+}
+
+function formatToISO(dateStr) {
+  // A pontokat kötőjelre cseréljük: 2024.02.09 -> 2024-02-09
+  const formattedDate = dateStr.replace(/\./g, "-");
+
+  // Hozzáfűzzük a fix időpontot és az eltolást
+  return `<p>
+  Published: 
+  <time datetime="${formattedDate}T08:00:00+00:00" itemprop="datePublished">
+    ${dateStr}
+  </time>
+</p>`;
 }
